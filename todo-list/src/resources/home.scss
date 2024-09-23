@@ -3,6 +3,7 @@ body {
 
   h1 {
     color: #E5D8CE;
+    padding: 3rem 0;
   }
 
   .form-btn{
@@ -12,8 +13,20 @@ body {
     align-items: center;
   }
 
-
   .form-label{
     color: #E5D8CE;
+  }
+
+  .todo-lists{
+    border: 1px solid #E5D8CE;
+    padding: 12px 24px;
+    border-radius: 0.5rem;
+    margin: 1rem;
+    display: flex;
+    justify-content: space-between;
+
+    h5, p{
+        color: #E5D8CE;
+    }
   }
 }
