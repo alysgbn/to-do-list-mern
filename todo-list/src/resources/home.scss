@@ -6,7 +6,7 @@ body {
     padding: 3rem 0;
   }
 
-  .todo-list-container{
+  .todo-list-container {
     display: flex;
   }
 
@@ -31,19 +31,18 @@ body {
     align-items: center;
     width: 100%;
 
-
-    .edit-delete{
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    gap: 1rem;
-
+    .edit-delete {
+      display: flex;
+      align-items: center;
+      justify-content: end;
+      gap: 1rem;
     }
 
     h5,
     p {
       color: #e5d8ce;
       margin-bottom: 0;
+      text-align: left;
     }
   }
 }
