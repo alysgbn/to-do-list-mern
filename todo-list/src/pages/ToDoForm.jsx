@@ -6,7 +6,6 @@ const ToDoForm = ({ todoList, setTodoList }) => {
   function handleButtonClick() {
     setTodoList([...todoList, task]);
     setTask("");
-    console.log("form", todoList);
   }
   return (
     <div className="form-btn">
