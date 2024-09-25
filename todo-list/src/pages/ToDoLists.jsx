@@ -26,11 +26,7 @@ const ToDoLists = ({ todoList, deleteTask, editTask }) => {
               variant="outline-light"
               onClick={() => {
                 setEditIndex(index);
-
-                if (editIndex === index) {
-                  editTask(index, todo);
-                  setSaved(true);
-                }
+                editTask(index, todo);
                 setSaved(!saved);
               }}
             >
