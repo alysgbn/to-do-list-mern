@@ -1,14 +1,31 @@
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import axios from "axios";
 const ToDoForm = ({ todoList, setTodoList }) => {
   const [task, setTask] = useState("");
 
-
-
   function handleButtonClick() {
-    setTodoList([...todoList, task]);
-    setTask("");
+    // setTodoList([...todoList, task]);
+    // setTask("");
+      // Post the new task to the server
+      axios
+      .post("http://localhost:4001/todos/new", { task })
+      .then((response) => {
+        const data = response.data;
+        console.log(data);
+        if (Array.isArray(data)) {
+          setTodoList([...data], ...todoList); // Update the state with the updated list from the server
+          console.log(todoList);
+        }
+      })
+      .catch((error) => console.error("Error adding task:", error));
+
+    setTask(""); // Clear the input field
   }
+  
+
+
+  
   return (
     <div className="form-btn">
       <Form.Label>To-do</Form.Label>
