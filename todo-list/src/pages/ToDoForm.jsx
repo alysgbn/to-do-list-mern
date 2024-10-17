@@ -9,14 +9,15 @@ const ToDoForm = ({ todoList, setTodoList }) => {
     // setTask("");
       // Post the new task to the server
       axios
-      .post("http://localhost:4001/todos/new", { task })
+      .post("http://localhost:4001/todos", { task})
       .then((response) => {
         const data = response.data;
         console.log(data);
-        if (Array.isArray(data)) {
-          setTodoList([...data], ...todoList); // Update the state with the updated list from the server
-          console.log(todoList);
-        }
+        setTodoList([...data], ...todoList); 
+        // if (Array.isArray(data)) {
+        //   setTodoList([...data], ...todoList); // Update the state with the updated list from the server
+        //   console.log(todoList);
+        // }
       })
       .catch((error) => console.error("Error adding task:", error));
 

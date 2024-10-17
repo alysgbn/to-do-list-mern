@@ -24,7 +24,7 @@ app.get('/todos', (req, res) => {
 });
 
 // Add a new task
-app.post('/todos/new', (req, res) => {
+app.post('/todos', (req, res) => {
   const newTask = req.body.task;
   todoList.push(newTask);
   res.status(201).json(todoList);
