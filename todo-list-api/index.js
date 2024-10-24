@@ -1,34 +1,25 @@
+// import {Schema} from 'mongoose';
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-// const connectDB = require('./db'); 
 
 require("dotenv").config();
-const TodoTask = require("./models/ToDoTask");
+
+// import model
+const ToDoTask = require("./models/ToDoTask");
+
 //Execute express
 const app = express();
 
 //Middlewares
-app.use(express.json({extended: true}));
+app.use(express.json({ extended: true }));
 app.use(cors());
 
 // port
 const port = 5000;
 
-// Temporary in-memory data store (since there's no database for now)
 let todoList = ["help", "ayaw"];
 
-//connection to db
-// mongoose.set("useFindAndModify", false);
-// mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, (err) => {
-//   if (err) {
-//     console.error('Error connecting to database:', err);
-//     process.exit(1); // Exit the process with a non-zero status code
-//   } else {
-//     console.log('Connected to db');
-//     app.listen(port, () => console.log('Server running'));
-//   }
-// });
 const mongoURI = "mongodb://localhost:27018/to-do-list-db";
 const connectToMongo = async () => {
   try {
@@ -39,38 +30,22 @@ const connectToMongo = async () => {
     console.log(error);
   }
 };
-
 connectToMongo();
 
-// mongoose.connect('mongodb://localhost:27018/', {
-//   dbName: 'to-do-list-db',
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// }, err => err ? console.log(err) : 
-//   console.log('Connected to yourDB-name database'));
-
-
-
-
-// Routes
-
-// Get all todo tasks
-// app.get("/todos", (req, res) => {
-//   res.json(todoList);
-// });
 app.get("/todos", async (req, res) => {
   try {
-    const db = mongoose.connection.db;
-    const collection = db.collection('ToDoTask');
-    const todoTasks = await collection.find().toArray();
-    console.log('Found documents:', todoTasks);
+    // const db = mongoose.connection.db;
+    // const collection = db.collection('ToDoTask');
+    const todoTasks = await ToDoTask.find();
+    // const taskIndex = await ToDoTask.findById(req.params.id);
+    console.log("Found documents:", todoTasks);
+    // console.log(taskIndex);
     res.json(todoTasks);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch todo tasks" });
   }
 });
-
 
 // Add a new task
 // app.post('/todos', (req, res) => {
@@ -81,15 +56,10 @@ app.get("/todos", async (req, res) => {
 // Add a new task
 app.post("/todos", async (req, res) => {
   try {
-    const db = mongoose.connection.db;
-    const collection = db.collection('ToDoTask');
-    console.log(req);
-    const newTask = {
-      Todo: req.body.Todo,
-    };
-    console.log('req body', req.body.Todo)
-    const result = await collection.insertOne(newTask);
-    res.status(201).json({ _id: result.insertedId, Todo: newTask.Todo });
+    // const db = mongoose.connection.db;
+    // const collection = db.collection('ToDoTask');
+    const task = req.body.task;
+    ToDoTask.create({ task: task }).then((result) => res.json(result));
   } catch (error) {
     res.status(500).json({ error: "Failed to create todo task" });
   }
@@ -118,25 +88,28 @@ app.put("/todos/:index", (req, res) => {
 // });
 
 // Delete a task by index
-app.delete("/todos/:index", (req, res) => {
-  const index = req.params.index;
+// app.delete("/todos/:index", (req, res) => {
+//   const index = req.params.index;
 
-  if (index >= 0 && index < todoList.length) {
-    todoList.splice(index, 1);
-    res.json(todoList);
-  } else {
-    res.status(404).json({ error: "Task not found" });
-  }
-});
-
-// app.delete("/todos/:id", async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     await TodoTask.findByIdAndRemove(id);
-//     res.json({ message: "Task deleted successfully" });
-//   } catch (error) {
+//   if (index >= 0 && index < todoList.length) {
+//     todoList.splice(index, 1);
+//     res.json(todoList);
+//   } else {
 //     res.status(404).json({ error: "Task not found" });
 //   }
 // });
+
+app.delete("/todos/:index", async (req, res) => {
+  // const db = mongoose.connection.db;
+  // const collection = db.collection("ToDoTask");
+
+  try {
+    console.log("index ng imong mama", req.params.index);
+    await ToDoTask.findByIdAndDelete(req.params.index);
+    res.json({ message: "Task deleted successfully" });
+  } catch (error) {
+    res.status(404).json({ error: "Task not found" });
+  }
+});
 console.log("App listen at port 5000");
 app.listen(port, () => console.log("Server is running on port", port));

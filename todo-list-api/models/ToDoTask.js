@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
-const todoTaskSchema = new mongoose.Schema({
-  id: { type: Number, default: 0 },
-  Todo: String
+
+const todoSchema = new mongoose.Schema({
+  // taskId: { type: String | Number, required: true },
+  task: { type: String },
 });
 
-module.exports = mongoose.model("ToDoTask", todoTaskSchema);
+module.exports = mongoose.model("ToDoTask", todoSchema);
