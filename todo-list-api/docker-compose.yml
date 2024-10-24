@@ -1,0 +1,18 @@
+services:
+  app:
+    container_name: to-do-list-server
+    restart: unless-stopped
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5454:5000"
+
+  db:
+    container_name: to-do-list-db
+    restart: unless-stopped
+    image: mongo:latest
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./data:/data
