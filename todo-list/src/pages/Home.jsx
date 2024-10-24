@@ -2,15 +2,16 @@ import React, { useEffect, useState } from "react";
 import "../resources/home.scss";
 import { Container } from "react-bootstrap";
 import ToDoForm from "./ToDoForm.tsx";
-import ToDoLists from "./ToDoLists";
+import ToDoLists from "./ToDoLists.tsx";
 import { useNavigate } from "react-router";
 import axios from "axios";
 
 export const Home = () => {
   const navigate = useNavigate();
-  const [todoList, setTodoList] = useState([]);
+  // const [todoList, setTodoList] = useState([]);
   const [task, setTask] = useState("");
   const API = "http://localhost:5000/todos";
+  const [taskData, setTaskData] = useState([]);
   // localStorage.setItem("toDoList", todoList);
 
   // function deleteTask(index) {
@@ -30,30 +31,24 @@ export const Home = () => {
     axios
       .get(API)
       .then((response) => {
-        // console.log(response.data.Todo)
-        const data = response.data;
-        const todos = response.data.map((item) => item.Todo);
-        setTodoList(todos);
-        // console.log(todos);
-        // if (Array.isArray(data)) {
-        //   setTodoList(data);
-        // }
+         const data = response.data;
+         setTaskData(data);
       })
       .catch((error) => {
         console.error("Error fetching todos:", error);
-        setTodoList([]); // Handle errors by setting an empty array
+        // setTodoList([]);
       });
-  }, [setTask]);
+  }, [taskData]);
 
   // Delete task from the server using axios
   function deleteTask(index) {
+  
     axios
-      .delete(`${API}/${index}`)
-      .then((response) => {
-        const data = response.data;
-        if (Array.isArray(data)) {
-          setTodoList(data);
-        }
+      .delete(`${API}/${index}`, {params: {index: index}})
+      .then(() => {
+        setTaskData(taskData.filter((task) => task._id !== index));
+        console.log("data delete", taskData);
+    
       })
       .catch((error) => console.error("Error deleting task:", error));
   }
@@ -65,26 +60,20 @@ export const Home = () => {
       .then((response) => {
         const data = response.data;
         if (Array.isArray(data)) {
-          setTodoList(data);
+          // setTodoList(data);
         }
       })
       .catch((error) => console.error("Error editing task:", error));
   }
 
-
-
   function handleButtonClick() {
     // ...
-    console.log('button clicked')
+    console.log("button clicked");
     axios
-      .post("http://localhost:5000/todos", { Todo: task })
+      .post("http://localhost:5000/todos", { task: task })
       .then((response) => {
         const data = response.data;
-        // if (data) {
-        //   setTodoList([...todoList, data]);
-        // } else {
-        //   console.error("Invalid response data:", data);
-        // }
+        // console.log(data)
       })
       .catch((error) => console.error("Error adding task:", error));
 
@@ -94,13 +83,14 @@ export const Home = () => {
   return (
     <Container>
       <ToDoLists
-        todoList={todoList}
-        // deleteTask={deleteTask}
+        // todoList={todoList}
+        data={taskData}
+        deleteTask={deleteTask}
         // editTask={editTask}
       />
       <ToDoForm
-        todoList={todoList}
-        setTodoList={setTodoList}
+        // todoList={todoList}
+        // setTodoList={setTodoList}
         handleButtonClick={handleButtonClick}
         setTask={setTask}
         task={task}

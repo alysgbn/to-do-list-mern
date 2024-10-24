@@ -1,23 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
-const ToDoLists = ({ todoList, deleteTask, editTask }) => {
+
+interface Task {
+  _id: string;
+  task?: string;
+}
+
+type Props = {
+  data: Task[];
+  deleteTask: (index: string) => void;
+}
+
+
+const ToDoLists = ({ data, deleteTask } : Props ) => {
   const [editIndex, setEditIndex] = useState(null);
   const [saved, setSaved] = useState(false);
   return (
     <div>
       <h1>To Do List</h1>
-      {todoList?.map((todo, index) => (
+      {/* <p>{data.task}</p> */}
+      {data?.map((item, index) => (
         <div className="todo-lists" key={index}>
           <div>
-            <h5>Task {index + 1}</h5>
+            <h5>Task {item._id}</h5>
             {editIndex === index && !saved ? (
               <input
                 type="text"
-                value={todo}
-                onChange={(e) => editTask(index, e.target.value)}
+                value={item.task}
+                // onChange={(e) => editTask(index, e.target.value)}
               />
             ) : (
-              <p>{todo}</p>
+              <p>{item.task}</p>
             )}
           </div>
           <div className="edit-delete">
@@ -25,14 +38,20 @@ const ToDoLists = ({ todoList, deleteTask, editTask }) => {
               key={index}
               variant="outline-light"
               onClick={() => {
-                setEditIndex(index);
-                editTask(index, todo);
+                // setEditIndex(index);
+                // editTask(index, todo);
                 setSaved(!saved);
               }}
             >
               {editIndex === index && !saved ? "Save" : "Edit"}
             </Button>{" "}
-            <Button variant="outline-light" onClick={() => deleteTask(index)}>
+            <Button
+              variant="outline-light"
+              onClick={() => {
+                deleteTask(item._id);
+                console.log("butto delete pressed!", item._id);
+              }}
+            >
               Delete
             </Button>
           </div>

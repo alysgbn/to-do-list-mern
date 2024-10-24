@@ -18,14 +18,18 @@ const ToDoForm = ( { handleButtonClick, setTask, task }: Props ) => {
             type="text"
             placeholder="Write your task"
             onChange={(e) => setTask(e.target.value)}
-            // value={task}
+            value={task}
           />
         </Form.Group>
       </Form>
       <Button
         variant="outline-light"
         onClick={() => {
-          handleButtonClick();
+          if (task !== "") {
+            handleButtonClick();
+          }
+         
+          setTask(""); // Clea
           console.log(task);
         }}
       >
