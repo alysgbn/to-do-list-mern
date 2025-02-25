@@ -1,5 +1,22 @@
 body {
   background-color: #181716 !important;
+  overflow-x: hidden;
+  padding-bottom: 5rem;
+
+  .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -10;
+    // background-image: url("../../public/background-img.jpg");
+    width: 100vw;
+    height: 40vh;
+    background-color: #AA6884;
+  }
+
+  .home-container {
+    margin-top: 7rem;
+  }
 
   h1 {
     color: #e5d8ce;
@@ -7,14 +24,42 @@ body {
   }
 
   .todo-list-container {
-    display: flex;
+    margin-top: 2rem;
+    background-color: #181716;
+    width: 100% !important;
+    padding: 1rem;
+    border-radius: 20px;
+    box-shadow: rgba(70, 70, 70, 0.1) 0px 4px 12px;
+
+
   }
 
   .form-btn {
+
     display: flex;
     gap: 2rem;
     justify-content: center;
     align-items: center;
+    width: 100%;
+
+    form {
+      display: flex;
+      gap: 2rem;
+    }
+
+    input {
+      background-color: #181716;
+      border: 1px solid pink;
+      outline: none;
+      color: lightgray;
+      box-shadow: none;
+      // width: 1500px;
+      width: 800px !important;
+      padding: 1rem;
+      border-radius: 20px;
+
+
+    }
   }
 
   .form-label {
@@ -22,21 +67,52 @@ body {
   }
 
   .todo-lists {
-    border: 1px solid #e5d8ce;
+    // border: 1px solid #e5d8ce;
     padding: 12px 24px;
     border-radius: 0.5rem;
     margin: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    // width: 100%;
+    background-color: #aa688411;
+
+    .left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+
+      div {
+        display: flex;
+        flex-direction: column !important;
+
+        input {
+          background-color: #181716;
+          border: 1px solid pink;
+          outline: none;
+          color: lightgray;
+          box-shadow: none;
+        }
+
+      }
+    }
 
     .edit-delete {
       display: flex;
       align-items: center;
       justify-content: end;
       gap: 1rem;
+
+      .btn-edit,
+      .btn-save {
+        background-color: pink;
+        border: 1px solid pink;
+        color: #181716;
+      }
     }
+
+
 
     h5,
     p {

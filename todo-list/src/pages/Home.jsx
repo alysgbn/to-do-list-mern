@@ -7,94 +7,92 @@ import { useNavigate } from "react-router";
 import axios from "axios";
 
 export const Home = () => {
+  // useNavigate hook for programmatic navigation
   const navigate = useNavigate();
-  // const [todoList, setTodoList] = useState([]);
+
+  // State to hold the current task input
   const [task, setTask] = useState("");
+  // API endpoint URL
   const API = "http://localhost:5000/todos";
+  // State to store the list of tasks fetched from the server
   const [taskData, setTaskData] = useState([]);
-  // localStorage.setItem("toDoList", todoList);
 
-  // function deleteTask(index) {
-  //   const newTodoList = [...todoList];
-  //   newTodoList.splice(index, 1);
-  //   setTodoList(newTodoList);
-  // }
-
-  // function editTask(index, newValue) {
-  //   const newTodoList = [...todoList];
-  //   newTodoList[index] = newValue;
-  //   setTodoList(newTodoList);
-  // }
-
-  // Fetch todo list from the server using axios
+  // useEffect hook to fetch the todo list from the server when the component mounts
   useEffect(() => {
     axios
       .get(API)
       .then((response) => {
-         const data = response.data;
-         setTaskData(data);
+        const data = response.data;
+        setTaskData(data);
       })
       .catch((error) => {
         console.error("Error fetching todos:", error);
-        // setTodoList([]);
       });
-  }, [taskData]);
+  }, []); // Empty dependency array ensures this runs only once on mount
 
-  // Delete task from the server using axios
+  // Function to delete a task from the server and update local state
   function deleteTask(index) {
-  
     axios
-      .delete(`${API}/${index}`, {params: {index: index}})
+      .delete(`${API}/${index}`, { params: { index: index } })
       .then(() => {
+        // Filter out the deleted task by its _id and update the state
         setTaskData(taskData.filter((task) => task._id !== index));
         console.log("data delete", taskData);
-    
       })
       .catch((error) => console.error("Error deleting task:", error));
   }
 
-  // Edit task on the server using axios
-  function editTask(index, newValue) {
+  // Function to edit a task on the server and update local state
+  function editTask(taskId, newValue) {
     axios
-      .put(`${API}/${index}`, { task: newValue })
+      .put(`${API}/${taskId}`, { task: newValue })
       .then((response) => {
-        const data = response.data;
-        if (Array.isArray(data)) {
-          // setTodoList(data);
-        }
+        // Update the specific task in the state with the new value
+        setTaskData(
+          taskData.map((task) =>
+            task._id === taskId ? { ...task, task: newValue } : task
+          )
+        );
       })
       .catch((error) => console.error("Error editing task:", error));
   }
 
+  // Function to add a new task to the server and update local state
   function handleButtonClick() {
-    // ...
-    console.log("button clicked");
     axios
-      .post("http://localhost:5000/todos", { task: task })
+      .post(API, { task })
       .then((response) => {
-        const data = response.data;
-        // console.log(data)
+        // Append the new task to the taskData state
+        setTaskData([...taskData, response.data]); // Update state with the new task
+        setTask(""); // Clear input field after submission
       })
       .catch((error) => console.error("Error adding task:", error));
-
-    setTask(""); // Clear the input field
   }
 
   return (
     <Container>
-      <ToDoLists
-        // todoList={todoList}
-        data={taskData}
-        deleteTask={deleteTask}
-        // editTask={editTask}
-      />
-      <ToDoForm
-        // todoList={todoList}
-        // setTodoList={setTodoList}
-        handleButtonClick={handleButtonClick}
-        setTask={setTask}
-        task={task}
-      />
+
+      <div className="background"></div>
+
+
+      <div className="home-container">
+        {/* Pass down the form functions and state to the ToDoForm component */}
+        <ToDoForm
+          handleButtonClick={handleButtonClick}
+          setTask={setTask}
+          task={task}
+        />
+   
+      <div className="todo-list-container">
+        {/* Pass down taskData and CRUD functions to the ToDoLists component */}
+        <ToDoLists
+          data={taskData}
+          deleteTask={deleteTask}
+          editTask={editTask}
+        />
+      </div>
+      </div>
+      {/* Navigate to another route on click */}
       <div
         style={{ marginTop: "2rem", color: "#e5d8ce", cursor: "pointer" }}
         onClick={() => navigate("/second")}
